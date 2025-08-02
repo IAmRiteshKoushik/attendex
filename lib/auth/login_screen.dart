@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:attendex_app/auth/auth_service.dart';
 import 'package:attendex_app/screens/admin_dashboard.dart';
-import 'package:attendex_app/screens/staff_dashboard.dart';
+import 'package:attendex_app/screens/staff/staff_dashboard.dart';
 import '../models/user_model.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (context) => user?.role == 'admin' ? AdminDashboard() : StaffDashboard(),
+        builder: (context) => user?.role == 'admin' ? AdminDashboard() : StaffLandingScreen(),
       ),
     );
   }

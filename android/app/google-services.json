@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "624295188956",
+    "project_id": "attendex-fada2",
+    "storage_bucket": "attendex-fada2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624295188956:android:fc7f71135e24ab87ae1719",
+        "android_client_info": {
+          "package_name": "com.example.attendex_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624295188956-tvttivfd6g4ahlf10nkrhbkqk3749tq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoyxURrLfxO6z8BwsgzkR8xIdXakxUI4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624295188956-7sq1b4iue4ah2s23npfso7vgdkl5fgh7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "624295188956-4ot7ubvh5sqf0jic212cfkmsbo434qbf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.attendexMain"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624295188956:android:1875ccd1256d851aae1719",
+        "android_client_info": {
+          "package_name": "com.example.attendexmain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "624295188956-tvttivfd6g4ahlf10nkrhbkqk3749tq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoyxURrLfxO6z8BwsgzkR8xIdXakxUI4Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "624295188956-7sq1b4iue4ah2s23npfso7vgdkl5fgh7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "624295188956-4ot7ubvh5sqf0jic212cfkmsbo434qbf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.attendexMain"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
