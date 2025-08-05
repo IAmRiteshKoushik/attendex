@@ -1,42 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'auth/auth_service.dart';
-import 'auth/login_screen.dart';
-import 'models/user_model.dart';
-import 'screens/admin_dashboard.dart';
-import 'screens/staff_dashboard.dart';
+import 'screens/participant_list.dart';
+import 'models/event.dart';
+import 'models/participant.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(AttendExApp());
-
+void main() {
+  runApp(MyApp());
 }
 
-class AttendExApp extends StatelessWidget {
-
-  final AuthService _authService = AuthService();
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Event sampleOngoingEvent = Event(
+      name: 'Hackathon',
+      venue: 'Amrita Auditorium',
+      startTime: DateTime.now(),
+      endTime: DateTime.now().add(Duration(hours: 2)),
+      status: EventStatus.ongoing,
+      participants: [
+        Participant(name: 'Harish', rollNumber: 'CSE23517', status: AttendanceStatus.unmarked),
+        Participant(name: 'Harinie', rollNumber: 'CSE23516', status: AttendanceStatus.present),
+        Participant(name: 'Kanishthika', rollNumber: 'CSE23520', status: AttendanceStatus.absent),
+      ],
+    );
+
     return MaterialApp(
-      title: 'AttendEx',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: FutureBuilder(
-        future: _authService.getCachedUser(),
-        builder: (context, AsyncSnapshot<UserModel?> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasData && snapshot.data != null) {
-            // Navigate to appropriate dashboard based on cached role
-            return snapshot.data!.role == 'admin' ? AdminDashboard() : StaffDashboard();
-          }
-          // No cached user, show login screen
-          return LoginScreen();
-        },
+      title: 'Attendex',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: ParticipantListScreen(event: sampleOngoingEvent),
     );
   }
 }
