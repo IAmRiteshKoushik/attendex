@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../models/participant.dart';
-import '../models/event.dart';
 import 'event_page_home.dart';
 
 
@@ -213,7 +211,7 @@ class _ParticipantListScreenState extends State<ParticipantListScreen> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => EventNamePage()),
+                  MaterialPageRoute(builder: (context) => EventPageHome()),
                 );
               },
               style: ElevatedButton.styleFrom(
