@@ -16,6 +16,8 @@ class UploadCsvScreen extends StatefulWidget {
 
 class _UploadCsvScreenState extends State<UploadCsvScreen> {
   final TextEditingController _eventNameController = TextEditingController();
+  final TextEditingController _eventDateController = TextEditingController();
+  final TextEditingController _eventTimeController = TextEditingController();
   bool _isUploading = false;
   double _uploadProgress = 0.0;
 
@@ -117,9 +119,11 @@ class _UploadCsvScreenState extends State<UploadCsvScreen> {
 
   Future<void> uploadCsv() async {
     String eventName = _eventNameController.text.trim();
-    if (eventName.isEmpty) {
+    String eventDate = _eventDateController.text.trim();
+    String eventTime = _eventTimeController.text.trim();
+    if (eventName.isEmpty || eventDate.isEmpty || eventTime.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter an event name')),
+        SnackBar(content: Text('Please fill all fields (Event Name, Date, and Time)')),
       );
       return;
     }
@@ -162,9 +166,9 @@ class _UploadCsvScreenState extends State<UploadCsvScreen> {
     try {
       // Pick CSV file
       FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.any, // Relaxed to test Google Drive compatibility
+        type: FileType.any,
         allowMultiple: false,
-        withData: true, // Ensure bytes are available
+        withData: true,
       );
 
       if (result == null || result.files.isEmpty) {
@@ -300,12 +304,14 @@ class _UploadCsvScreenState extends State<UploadCsvScreen> {
         }
       }
 
-      // Create or update event metadata
+      // Create or update event metadata with date and time
       if (!eventDoc.exists) {
         currentBatch.set(
           FirebaseFirestore.instance.collection('formMetadata').doc(formId),
           {
             'eventName': eventName,
+            'eventDate': eventDate,
+            'eventTime': eventTime,
             'fields': headers,
             'createdAt': FieldValue.serverTimestamp(),
           },
@@ -316,6 +322,8 @@ class _UploadCsvScreenState extends State<UploadCsvScreen> {
           FirebaseFirestore.instance.collection('formMetadata').doc(formId),
           {
             'eventName': eventName,
+            'eventDate': eventDate,
+            'eventTime': eventTime,
             'fields': headers,
           },
           SetOptions(merge: true),
@@ -367,9 +375,11 @@ class _UploadCsvScreenState extends State<UploadCsvScreen> {
       if (mounted) {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Uploaded $validRows participants for $eventName')),
+          SnackBar(content: Text('Uploaded $validRows participants for $eventName on $eventDate at $eventTime')),
         );
         _eventNameController.clear();
+        _eventDateController.clear();
+        _eventTimeController.clear();
       }
     } catch (e, stack) {
       debugPrint('Error uploading CSV: $e\n$stack');
@@ -392,29 +402,132 @@ class _UploadCsvScreenState extends State<UploadCsvScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Create Event & Upload CSV')),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _eventNameController,
-              decoration: InputDecoration(
-                labelText: 'Event Name',
-                hintText: 'e.g., Annual Tech Fest 2025',
-              ),
+      appBar: AppBar(
+        title: Text('Create Event & Upload CSV'),
+        backgroundColor: Color(0xFF64D7BE),
+        elevation: 2,
+      ),
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  shadowColor: Colors.black.withOpacity(0.15),
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Event Details',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF4ABFA8),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        TextField(
+                          controller: _eventNameController,
+                          decoration: InputDecoration(
+                            labelText: 'Event Name',
+                            hintText: 'e.g., Annual Tech Fest 2025',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFF64D7BE)),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        TextField(
+                          controller: _eventDateController,
+                          decoration: InputDecoration(
+                            labelText: 'Event Date',
+                            hintText: 'e.g., 2025-08-02',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFF64D7BE)),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        TextField(
+                          controller: _eventTimeController,
+                          decoration: InputDecoration(
+                            labelText: 'Event Time',
+                            hintText: 'e.g., 14:30',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFF64D7BE)),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  shadowColor: Colors.black.withOpacity(0.15),
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Upload CSV',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF4ABFA8),
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: _isUploading ? null : uploadCsv,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _isUploading ? Colors.grey : Color(0xFF4ABFA8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              side: BorderSide(color: Color(0xFF64D7BE), width: 1),
+                            ),
+                            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                          ),
+                          child: _isUploading
+                              ? CircularProgressIndicator(color: Colors.white)
+                              : Text(
+                            'Upload CSV',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _isUploading ? null : uploadCsv,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _isUploading ? Colors.grey : Theme.of(context).primaryColor,
-              ),
-              child: _isUploading
-                  ? CircularProgressIndicator(color: Colors.white)
-                  : Text('Upload CSV'),
-            ),
-          ],
+          ),
         ),
       ),
     );

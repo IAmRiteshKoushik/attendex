@@ -5,7 +5,7 @@ import 'auth/auth_service.dart';
 import 'auth/login_screen.dart';
 import 'models/user_model.dart';
 import 'screens/admin_dashboard.dart';
-import 'screens/staff_dashboard.dart';
+import 'screens/staff/staff_dashboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +31,7 @@ class AttendExApp extends StatelessWidget {
           }
           if (snapshot.hasData && snapshot.data != null) {
             // Navigate to appropriate dashboard based on cached role
-            return snapshot.data!.role == 'admin' ? AdminDashboard() : StaffDashboard();
+            return snapshot.data!.role == 'admin' ? AdminDashboard() : StaffLandingScreen();
           }
           // No cached user, show login screen
           return LoginScreen();
